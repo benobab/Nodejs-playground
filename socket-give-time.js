@@ -1,19 +1,20 @@
-Number.prototype.pad = function(size) {
-      var s = String(this);
-      while (s.length < (size || 2)) {s = "0" + s;}
-      return s;
-    }
-    
-var net = require('net');
-
-var server = net.createServer(function(socket){
-    //Format the date to send to the client
-    var date = new Date();
-    //Write the date
-    console.log(date.getUTCDate());
-    socket.write(date.getFullYear()+'-'+(date.getMonth() + 1).pad()+'-'+date.getUTCDate().pad()+' '+date.getHours()+':'+date.getMinutes() + '\n');
-    socket.end("");
-    
-});
-
-server.listen(process.argv[2]);
+var net = require('net')  
+       
+     function zeroFill(i) {  
+       return (i < 10 ? '0' : '') + i  
+     }  
+       
+     function now () {  
+       var d = new Date()  
+       return d.getFullYear() + '-'  
+         + zeroFill(d.getMonth() + 1) + '-'  
+         + zeroFill(d.getDate()) + ' '  
+         + zeroFill(d.getHours()) + ':'  
+         + zeroFill(d.getMinutes())  
+     }  
+       
+     var server = net.createServer(function (socket) {  
+       socket.end(now() + '\n')  
+     })  
+       
+     server.listen(Number(process.argv[2]))
